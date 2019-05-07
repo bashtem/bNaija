@@ -1,0 +1,247 @@
+<h6 class="section-header">
+    <div class="text-muted">Data Setup</div>
+</h6>
+<div class="row size10">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <a class="nav-link active" data-toggle="tab" ng-click="fetchOpenCredit()" data-target="#openCredit">Opening Credit</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" ng-click="fetchCommission()" data-target="#agentCommission">Agent Commission</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" ng-click="fetchAgentWithdraw()" data-target="#agentWithdrawal">Agent Withdrawal</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" ng-click="fetchBet9jaPayment()" data-target="#bet9jaPayment">Bet9ja Payment</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="tab" ng-click="fetchBankWithdraw()" data-target="#bankWithdrawal">Bank Withdrawal</a>
+            </li>
+          </ul>
+          <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade show active" id="openCredit">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="input-group col-md-3 input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input uib-datepicker-popup="MMMM-yyyy" myDate type="text" ng-click="showDate()" datepicker-options="{minMode:'month'}" is-open="uiOpen" ng-model="setupDate" ng-change="fetchOpenCredit()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                                <div class="input-group-append">
+                                    <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchOpenCredit()" ><i class="far fa-search"></i></a></span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <span class="float-right font-weight-bold size12"> Opening Credit : {{monthLabel | date:"MMMM-yyyy"}} </span>
+                            </div>
+                        </div><hr>
+                        <div class="row">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <form ng-submit="saveOpenCredit()">
+                                        <div class="form-group">
+                                            <label for="exampleInputEmail1">Amount</label>
+                                            <input type="number" ng-model="openCreditAmount" required class="form-control form-control-sm size10" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Amount">
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-sm btn-outline-success size10 float-right">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="agentCommission">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="input-group col-md-3 input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input uib-datepicker-popup="MMMM-yyyy" myDate type="text" ng-click="showDate()" datepicker-options="{minMode:'month'}" is-open="uiOpen" ng-model="setupDate" ng-change="fetchCommission()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                                <div class="input-group-append">
+                                    <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchCommission()" ><i class="far fa-search"></i></a></span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <span class="float-right font-weight-bold size12"> Commission : {{monthLabel | date:"MMMM-yyyy"}} </span>
+                            </div>
+                        </div><hr>
+                        <div class="row">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <form ng-submit="saveCommission()">
+                                        <div class="table-responsive-sm">
+                                            <table class=" table-sm table-hover table-bordered table-mod">
+                                                <thead>
+                                                    <tr>
+                                                        <th>DATE</th>
+                                                        <th>AMMOUNT</th>
+                                                        <th>REMARKS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in [] | range:comDays">
+                                                        <td>{{$index+1}} </td>
+                                                        <td><input class="form-control form-control-sm size10" ng-model="$parent.amountCom[$index+1]" type="number"></td>
+                                                        <td><textarea class="form-control form-control-sm size10" ng-model="$parent.remark[$index+1]"></textarea></td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr>
+                                        <button type="submit" class="btn btn-outline-success btn-sm size10">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="agentWithdrawal">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="input-group col-md-3 input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input uib-datepicker-popup="MMMM-yyyy" myDate type="text" ng-click="showDate()" datepicker-options="{minMode:'month'}" is-open="uiOpen" ng-model="setupDate" ng-change="fetchAgentWithdraw()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                                <div class="input-group-append">
+                                    <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchAgentWithdraw()" ><i class="far fa-search"></i></a></span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <span class="float-right font-weight-bold size12"> Agent Withdrawal : {{monthLabel | date:"MMMM-yyyy"}} </span>
+                            </div>
+                        </div><hr>
+                        <div class="row">
+                            <div class="card">
+                                <div class="card-body" >
+                                    <form ng-submit="saveAgentWithdraw()">
+                                        <div class="table-responsive-sm">
+                                            <table class=" table-sm table-hover table-bordered table-mod">
+                                                <thead>
+                                                    <tr>
+                                                        <th>DATE</th>
+                                                        <th>AMMOUNT</th>
+                                                        <th>REMARKS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr ng-repeat="x in [] | range:comDays">
+                                                        <td>{{$index+1}} </td>
+                                                        <td><input class="form-control form-control-sm size10" ng-model="$parent.amountAgentWithdraw[$index+1]" type="number"></td>
+                                                        <td><textarea class="form-control form-control-sm size10" ng-model="$parent.remarkAgentWithdraw[$index+1]"></textarea></td>
+                                                    </tr>
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <hr>
+                                        <button type="submit" class="btn btn-outline-success btn-sm size10">Save</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <div class="tab-pane fade" id="bet9jaPayment">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="input-group col-md-3 input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input uib-datepicker-popup="MMMM-yyyy" myDate type="text" ng-click="showDate()" datepicker-options="{minMode:'month'}" is-open="uiOpen" ng-model="setupDate" ng-change="fetchBet9jaPayment()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                                <div class="input-group-append">
+                                    <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchBet9jaPayment()" ><i class="far fa-search"></i></a></span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <span class="float-right font-weight-bold size12"> Bet9ja Payment : {{monthLabel | date:"MMMM-yyyy"}} </span>
+                            </div>
+                        </div><hr>
+                        <div class="row">
+                            <div class="card">
+                                <div class="card-body" >
+                                        <form ng-submit="saveBet9jaPayment()">
+                                            <div class="table-responsive-sm">
+                                                <table class=" table-sm table-hover table-bordered table-mod">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>DATE</th>
+                                                            <th>AMMOUNT</th>
+                                                            <th>REMARKS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="x in [] | range:comDays">
+                                                            <td>{{$index+1}} </td>
+                                                            <td><input class="form-control form-control-sm size10" ng-model="$parent.amountBet9jaPayment[$index+1]" type="number"></td>
+                                                            <td><textarea class="form-control form-control-sm size10" ng-model="$parent.remarkBet9jaPayment[$index+1]"></textarea></td>
+                                                        </tr>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <hr>
+                                            <button type="submit" class="btn btn-outline-success btn-sm size10">Save</button>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="bankWithdrawal">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="input-group col-md-3 input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                </div>
+                                <input uib-datepicker-popup="MMMM-yyyy" myDate type="text" ng-click="showDate()" datepicker-options="{minMode:'month'}" is-open="uiOpen" ng-model="setupDate" ng-change="fetchBankWithdraw()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                                <div class="input-group-append">
+                                    <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchBankWithdraw()" ><i class="far fa-search"></i></a></span>
+                                </div>
+                            </div>
+                            <div class="col-md-9">
+                                <span class="float-right font-weight-bold size12"> Bank Withdrawal : {{monthLabel | date:"MMMM-yyyy"}} </span>
+                            </div>
+                        </div><hr>
+                        <div class="row">
+                            <div class="card">
+                                <div class="card-body" >
+                                        <form ng-submit="saveBankWithdraw()">
+                                            <div class="table-responsive-sm">
+                                                <table class=" table-sm table-hover table-bordered table-mod">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>DATE</th>
+                                                            <th>AMMOUNT</th>
+                                                            <th>REMARKS</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr ng-repeat="x in [] | range:comDays">
+                                                            <td>{{$index+1}} </td>
+                                                            <td><input class="form-control form-control-sm size10" ng-model="$parent.amountBankWithdraw[$index+1]" type="number"></td>
+                                                            <td><textarea class="form-control form-control-sm size10" ng-model="$parent.remarkBankWithdraw[$index+1]"></textarea></td>
+                                                        </tr>
+                                                        
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <hr>
+                                            <button type="submit" class="btn btn-outline-success btn-sm size10">Save</button>
+                                        </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+    </div>
+</div>

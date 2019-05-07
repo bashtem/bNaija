@@ -1,0 +1,69 @@
+<h6 class="section-header">
+    <div class="text-muted">Cashiers</div>
+</h6>
+
+<div class="row">
+    <div class="col-md-4">
+        <form ng-submit="addCashier()">
+            <fieldset><br>
+              <legend class="size12 text-muted"><i class="fal fa-user-plus"></i> Add / Edit Cashier</legend>
+              
+              <div class="form-group">
+                <label for="cashierName">Name</label>
+                <input type="text" class="form-control form-control-sm size10" id="cashierName" ng-model="cashierName" placeholder="Enter Full Name" required>
+              </div>
+              <div class="form-group">
+                <label for="cashierPhone">Phone No.</label>
+                <input type="tel" class="form-control form-control-sm size10" id="cashierPhone" ng-model="cashierPhone"  placeholder="Enter Phone Number" required>
+              </div>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control form-control-sm size10" id="exampleInputEmail1" ng-model="cashierMail"  placeholder="Enter email (Optional)">
+              </div>
+              <button type="submit" class="btn btn-outline-primary size10 btn-sm"><i class="fal fa-check"></i> Submit</button>
+              <a href="" ng-click="reset()" class="btn btn-link size10">Reset</a>
+            </fieldset>
+        </form>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                    <div class="float-right">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-change="cashier_search()" ng-model="searchCashier" placeholder="Search">
+                        </div>
+                    </div>
+                    <!-- <h4>Cashier List</h4> -->
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-striped table-hover" > 
+                    <thead>
+                        <tr class="text-muted">
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>E-mail</th>
+                            <th>Date Added</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="x in cashierList">
+                            <td>{{$index+1}} </td>
+                            <td>{{x.name}} </td>
+                            <td>{{x.phone}} </td>
+                            <td>{{x.email}} </td>
+                            <td>{{x.created_at}} </td>
+                            <td><a href="" title="Edit Cashier" ng-click="editCashier(x)" data-toggle="tooltip"><i class="fal fa-pencil-alt"></i> </a> </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="alert alert-light" ng-show="cashierList.length == 0">
+                    <div class="text-center">No Cashier Available</div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+</div>

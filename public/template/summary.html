@@ -1,0 +1,167 @@
+<h6 class="section-header">
+    <div class="text-muted">Summary</div>
+</h6>
+<div class="row size10">
+    <div class="col-md-12">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" data-target="#dailySummary">Daily Summary</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" data-target="#monthlySummary">Monthly Summary</a>
+            </li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade show active" id="dailySummary">
+                <div class="row size10">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="input-group col-md-3 input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input uib-datepicker-popup="MMMM-yyyy"  type="text" ng-click="showDate()" is-open="uiOpen"  datepicker-options="{minMode:'month'}" ng-model="statementMonth" ng-change="dailySummarySearch()" class="form-control form-control-sm size11" placeholder="Select Month">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text size10"><a href="" title="Search" ng-click="dailySummarySearch()" ><i class="far fa-search"></i></a></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="float-right font-weight-bold size12"> Summary : {{summaryMonth | date:"MMMM-yyyy"}} </span>
+                                </div>
+                            </div><hr>
+                            <div class="row">
+                                <div class="table-responsive-sm">
+                                    <table class="table table-hover table-sm table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>DATE</th>
+                                                <th>CREDIT TOTAL</th>
+                                                <th>TOTAL WITHDRAWAL</th>
+                                                <th>DAILY BALANCE</th>
+                                                <th>OFFICE SALES</th>
+                                                <th>WINNINGS</th>
+                                                <th>WINNINGS PAID</th>
+                                                <th>WINNINGS PENDING</th>
+                                                <th>ACTUAL SALES</th>
+                                                <th>TOTAL CASH</th>
+                                                <th>OPS. EXPENSES</th>
+                                                <th>PAYMENT TO BANK</th>
+                                                <th>CLOSING BALANCE</th>
+                                                <th>BET9JA OPENING CREDIT</th>
+                                                <th>AGENT COMMISSION</th>
+                                                <th>AGENT WITHDRAWAL</th>
+                                                <th>BET9JA PAYMENT</th>
+                                                <th>BALANCE PAYABLE TO BET9JA</th>
+                                                <th>AGENT DAILY CREDIT POSITION</th>
+                                                <th>BANK DEPOSIT</th>
+                                                <th>BANK WITHDRAWALS</th>
+                                                <th>BALANCE COLUMN</th>
+                                                <th>DAILY BANK BALANCE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="x in listDailySummary track by $index">
+                                                <td>{{$index + 1}} </td>
+                                                <td>{{credit_total(x) | number}} </td>
+                                                <td>{{total_withdrawal(x) | number}}</td>
+                                                <td>{{daily_balance(x) | number}}</td>
+                                                <td>{{office_sales(x) | number}}</td>
+                                                <td>{{winnings(x) | number}}</td>
+                                                <td>{{winnings_paid(x) | number}}</td>
+                                                <td>{{winnings_pending(x) | number}}</td>
+                                                <td>{{actual_sales(x) | number}}</td>
+                                                <td>{{total_cash(x, $index) | number}}</td>
+                                                <td>{{ops_expenses(x) | number}}</td>
+                                                <td>{{bank_payment(x) | number}}</td>
+                                                <td>{{closing_balance(x) | number}}</td>
+                                                <td>{{b9ja_open_credit(x, $index) | number}}</td>
+                                                <td>{{commission[$index] | number}} </td>
+                                                <td>{{agentWithdraw[$index] | number}}</td>
+                                                <td>{{bet9jaPayment[$index] | number}}</td>
+                                                <td>{{balancePayableToBet9ja(x, $index) | number}} </td>
+                                                <td>{{agentDailyCreditPos(x, $index) | number}} </td>
+                                                <td>{{bankDeposit(x, $index) | number}} </td>
+                                                <td>{{bankWithdraw[$index] | number}}</td>
+                                                <td>{{balanceColumn(x, $index) | number}} </td>
+                                                <td>{{dailyBankBalance(x, $index) | number}} </td>
+                                            </tr>    
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="monthlySummary">
+                <div class="row size10">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="input-group col-md-3 input-group-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                                    </div>
+                                    <input uib-datepicker-popup myDate type="text" ng-click="showDate()" is-open="uiOpen" ng-model="statementDate" ng-change="fetchSearch()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                                    <div class="input-group-append">
+                                        <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchSearch()" ><i class="far fa-search"></i></a></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <span class="float-right font-weight-bold size12"> Summary : {{statementDate | date}} </span>
+                                </div>
+                            </div><hr>
+                            <div class="row">
+                                <div class="card">
+                                    <div class="card-body" >
+                                        <div class="table-responsive-sm">
+                                            <table class="table table-hover table-sm table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S/N</th>
+                                                        <th>MONTH</th>
+                                                        <th>OFFICE SALES</th>
+                                                        <th>WINNINGS</th>
+                                                        <th>WINNINGS PAID</th>
+                                                        <th>WINNINGS PENDING</th>
+                                                        <th>ACTUAL SALES</th>
+                                                        <th>TOTAL CASH</th>
+                                                        <th>OPS. EXPENSES</th>
+                                                        <th>PAYMENT TO BET9JA</th>
+                                                        <th>COMMISSIONS</th>
+                                                        <th>WITHDRAWALS</th>
+                                                        <th>BET9JA CLOSING DEBT</th>
+                                                        <th>BANK DEPOSIT</th>
+                                                        <th>BANK WITHDRAWALS</th>
+                                                        <th>BANK BALANCE</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                        <td>0</td>
+                                                    </tr>    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

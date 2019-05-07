@@ -1,0 +1,311 @@
+<h6 class="section-header">
+    <div class="text-muted text">Statement</div>
+</h6>
+<div class="row size10">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="input-group col-md-3 input-group-sm">
+                <div class="input-group-prepend">
+                    <span class="input-group-text size11"><i class="far fa-calendar-alt"></i></span>
+                </div>
+                <input uib-datepicker-popup myDate type="text" ng-click="showDate()" is-open="uiOpen" ng-model="statementDate" ng-change="fetchSearch()" class="form-control form-control-sm size11" placeholder="Select Date"  >
+                <div class="input-group-append">
+                    <span class="input-group-text size10"><a href="" title="Search" ng-click="fetchSearch()" ><i class="far fa-search"></i></a></span>
+                </div>
+            </div>
+            <div class="col-md-9">
+               <span class="float-right font-weight-bold size12"> Statement : {{statementDate | date}} </span>
+            </div>
+        </div><hr>
+        <div class="row">
+            <div class="container">
+                    <div class="table-responsive-sm">
+                        <table class="table noPad table-hover table-sm table-bordered">
+                            <thead>
+                                <tr class="table-dark">
+                                    <th class="text-white">CREDIT</th>
+                                    <th ng-repeat="x in cashierList" class="size10 text-white">{{x.name | uppercase}} </th>
+                                    <th class="text-white"> TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>BF</td>
+                                    <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="bf[x.cashier_id]" type="number"> </td>
+                                    <td><span>{{total_credit_row("$scope.bf") | number}} </span></td>
+                                </tr>
+                                <tr>
+                                    <td>INTER-CREDIT</td>
+                                    <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="inter_credit[x.cashier_id]" type="number"> </td>
+                                    <td><span>{{total_credit_row("$scope.inter_credit") | number}}</span></td>
+                                </tr>
+                                <tr>
+                                        <td>SPORT WIN</td>
+                                        <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="win_sport[x.cashier_id]" type="number"> </td>
+                                        <td><span>{{total_credit_row('$scope.win_sport') | number}}</span></td>
+                                    </tr>
+                                <tr>
+                                    <td>LEAGUE > SPORT</td>
+                                    <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="lea_sport[x.cashier_id]" type="number"> </td>
+                                    <td><span>{{total_credit_row('$scope.lea_sport') | number}}</span></td>
+                                </tr>
+                                
+                                <!-- <tr>
+                                    <td>WIN BET49JA</td>
+                                    <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="win_bet49ja[x.cashier_id]" type="number"> </td>
+                                    <td><span>{{total_credit_row('$scope.win_bet49ja') | number}}</span></td>
+                                </tr> -->
+                                <tr class="table-warning">
+                                    <td >TOTAL CREDIT</td>
+                                    <td  ng-repeat="x in cashierList"> <span>{{sum_credit_column(x.cashier_id) | number}} </span> </td>
+                                    <td><span>{{total_credit() | number}} </span></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th  ng-repeat="x in cashierList"></th>
+                                    <th></th>
+                                </tr>
+                                <thead >
+                                    <tr class="table-dark">
+                                        <th class="text-white">WITHDRAWAL</th>
+                                        <th  ng-repeat="x in cashierList"></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                    <tr>
+                                        <td>INTER DEBIT</td>
+                                        <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="inter_debit[x.cashier_id]" type="number"> </td>
+                                        <td><span >{{ total_withdrawl_row('$scope.inter_debit') | number}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>SPORT BET</td>
+                                        <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="sport[x.cashier_id]" type="number"> </td>
+                                        <td><span>{{total_withdrawl_row('$scope.sport') | number}}</span></td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td>BET49JA</td>
+                                        <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="bet49ja[x.cashier_id]" type="number"> </td>
+                                        <td><span>{{ total_withdrawl_row('$scope.bet49ja') | number}}</span></td>
+                                    </tr> -->
+                                    <tr>
+                                        <td>SPORT > LEAGUE</td>
+                                        <td  ng-repeat="x in cashierList"><input class="form-control form-control-sm size10" ng-model="sport_lea[x.cashier_id]" type="number"> </td>
+                                        <td><span>{{total_withdrawl_row('$scope.sport_lea') | number}}</span></td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <td>TOTAL WITHDRAWAL</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{sum_withdrawl_column(x.cashier_id) | number}} </span> </td>
+                                        <td><span >{{total_withdrawl() | number}}</span></td>
+                                    </tr>
+                                    <tr class="table-danger">
+                                        <td>DAILY BALANCE</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{sum_dailyBalance(x.cashier_id) | number}} </span> </td>
+                                        <td><span>{{total_dailyBalance() | number}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th  ng-repeat="x in cashierList"></th>
+                                        <th></th>
+                                    </tr>
+                                    <thead>
+                                        <tr class="table-dark">
+                                            <th class="text-white">SALES</th>
+                                            <th  ng-repeat="x in cashierList"></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tr>
+                                        <td>SPORT BET STAKE</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{sport_bet_stake(x.cashier_id) | number}} </span> </td>
+                                        <td><span >{{total_sport_bet_stake_row('$scope.sport') | number}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VIRTUAL STAKE</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{virtual_stake(x.cashier_id) | number}} </span> </td>
+                                        <td><span></span>{{total_virtual_stake() | number}}</td>
+                                    </tr>
+                                    <!-- <tr>
+                                        <td>BET49JA</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{bet49ja_row(x.cashier_id) | number}} </span> </td>
+                                        <td><span>{{total_bet49ja() | number}}</span></td>
+                                    </tr> -->
+                                    <tr>
+                                        <td>WEB SALES</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{sales(x.cashier_id) | number}} </span> </td>
+                                        <td><span></span>{{total_sales() | number}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>OFFICE SALES</td>
+                                        <td  ng-repeat="x in cashierList"><input ng-keyup="checkInput('officeSales', office_sales[x.cashier_id], x.cashier_id)" ng-init="value_input.officeSales[x.cashier_id] = 'empty-input'"  ng-class="value_input.officeSales[x.cashier_id]"  class="form-control form-control-sm size10" ng-model="office_sales[x.cashier_id]" type="number"> </td>
+                                        <td><span>{{total_office_sales() | number}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>WINNINGS PAID</td>
+                                        <td  ng-repeat="x in cashierList"><input ng-keyup="checkInput('winPaid', win_paid[x.cashier_id], x.cashier_id)" ng-init="value_input.winPaid[x.cashier_id] = 'empty-input'"  ng-class="value_input.winPaid[x.cashier_id]"  class="form-control form-control-sm size10 " ng-model="win_paid[x.cashier_id]" type="number"> </td>
+                                        <td><span>{{total_winnings_paid() | number}}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>ACTUAL SALES</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{actual_sales(x.cashier_id) | number}} </span> </td>
+                                        <td><span>{{actual_sales_last() | number}}</span></td>
+                                    </tr>
+                                    <tr class="table-danger">
+                                        <td>DIF. WEB & OFFICE</td>
+                                        <td  ng-repeat="x in cashierList"><span>{{diff_office_total_sales(x.cashier_id) | number}} </span> </td>
+                                        <td><span>{{diff_office_total_sales_last() | number}}</span></td>
+                                    </tr>
+                                    
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <table class=" table-sm table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>CASH MOVEMENT</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ACTUAL SALES</td>
+                                    <td><span>{{actual_sales_last() | number}} </span></td>
+                                </tr>
+                                <tr>
+                                    <td>B/F CASH</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="cash_movement.bf_cash"  type="number"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>TOTAL ACTUAL & B/F CASH</td>
+                                    <td><span>{{total_cash() | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td>BANK PAYMENT</td>
+                                    <td><input  class="form-control form-control-sm size10"  ng-model="cash_movement.bank_payment"  type="number"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>EXPENSES</td>
+                                    <td><input  class="form-control form-control-sm size10"  ng-model="cash_movement.expenses"  type="number"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>FLOAT</td>
+                                    <td><input  class="form-control form-control-sm size10"  ng-model="cash_movement.float" type="number"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>NET CASH BALANCE</td>
+                                    <td><span>{{cash_balance() | number}} </span></td>
+
+                                </tr>
+                                <tr class="table-success">
+                                    <td>GROSS CASH BALANCE</td>
+                                    <td><span>{{credit_balance() | number}} </span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class=" noPad table-sm table-hover table-bordered ">
+                            <thead>
+                                <tr>
+                                    <th>SUMMARY ACCOUNT</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>APPROVED CREDIT</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.approved_credit"  type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td>OPENING BALANCE</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.opening_balance"  type="number"></td>
+
+                                </tr>
+                                <tr>
+                                    <td>AVAILABLE CREDIT</td>
+                                    <td><span>{{available_credit() | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td>WEB BALANCE</td>
+                                    <td><span>{{web_balance() | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td>PAYABLE TO BET9JA</td>
+                                    <td><span>{{payable_bet9ja() | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td>CREDIT WITHDRAWABLE</td>
+                                    <td><span>{{credit_withdrawalable() | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td>OUTSTANDING WINNINGS</td>
+                                    <td><span>{{0 | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <td>AGENT TOTAL DEBT</td>
+                                    <td><span>{{0 | number}} </span></td>
+
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>COMMISSION</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.commission"  type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td>DEDUCTION</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.deduction"  type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td>BALANCE COMMISSION</td>
+                                    <td><span>{{balance_commission() | number}} </span></td>
+                                </tr>
+                                <tr>
+                                    <td>AGENT DEPOSIT</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.agent_deposit"  type="number"></td>
+                                </tr>
+                                <tr>
+                                    <td>AGENT WITHDRAWAL</td>
+                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.agent_withdrawal"  type="number"></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th>PROFIT / LOSS</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>SPORT SALES</td>
+                                    <td><span>{{sport_sales() | number}} </span></td>
+                                </tr>
+                                <tr>
+                                    <td>TOTAL WINNINGS</td>
+                                    <td><span>{{total_winnings() | number}} </span></td>
+                                </tr>
+                                <tr CLASS="table-success">
+                                    <td>PROFIT/LOSS</td>
+                                    <td><span>{{profit_loss() | number}} </span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr>
+                    <button type="button" ng-click="saveStatement()" class="btn btn-sm btn-outline-success size12">Save Statement</button>
+            </div>
+        </div>
+    </div>
+</div>
