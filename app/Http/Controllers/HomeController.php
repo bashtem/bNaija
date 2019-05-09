@@ -83,12 +83,13 @@ class HomeController extends Controller
                     'sport_league'=>$each['sportLea'],
                     'office_sales'=>$each['officeSales'],
                     'winnings_paid'=>$each['winPaid'],
+                    'outstnd_win_bal'=>$each['outWinBal'],
                     'created_at'=>Carbon::now(),
                     'updated_at'=>Carbon::now() ];
                     StatementData::where("user_id", Auth::user()->user_id)->where("statement_id", $req->statementId)->where("cashier_id",$each['cashier_id'])->update($sDatas);
                 }
                 Cash_movement::where("user_id", Auth::user()->user_id)->where("statement_id", $req->statementId)->update(["bf"=>$req['cash']['bf'], "bank_payment"=>$req['cash']['bankPayment'], "expenses"=>$req['cash']['expenses'], "float"=>$req['cash']['float'], "credit_balance"=>$req['cash']['creditBalance'], "updated_at"=>Carbon::now()]);
-                Summary::where("user_id", Auth::user()->user_id)->where("statement_id", $req->statementId)->update(["approved_credit"=>$req['summary']['approvedCredit'], "opening_balance"=>$req['summary']['openingBalance'], "commission"=>$req['summary']['commission'], "deduction"=>$req['summary']['deduction'], "agent_deposit"=>$req['summary']['agentDeposit'], "agent_withdrawal"=>$req['summary']['agentWithdraw'],"updated_at"=>Carbon::now()]);
+                Summary::where("user_id", Auth::user()->user_id)->where("statement_id", $req->statementId)->update(["approved_credit"=>$req['summary']['approvedCredit'], "available_credit"=>$req['summary']['availableCredit'], "opening_balance"=>$req['summary']['openingBalance'], "commission"=>$req['summary']['commission'], "deduction"=>$req['summary']['deduction'], "agent_deposit"=>$req['summary']['agentDeposit'], "agent_withdrawal"=>$req['summary']['agentWithdraw'], "sport_sales"=>$req['summary']['sportSales'], "total_winnings"=>$req['summary']['totalWinnings'], "updated_at"=>Carbon::now()]);
             }catch(\Exception $e){
                 DB::rollback();
                 throw $e;
@@ -114,13 +115,14 @@ class HomeController extends Controller
                 'sport_league'=>$each['sportLea'],
                 'office_sales'=>$each['officeSales'],
                 'winnings_paid'=>$each['winPaid'],
+                'outstnd_win_bal'=>$each['outWinBal'],
                 'created_at'=>Carbon::now(),
                 'updated_at'=>Carbon::now() ];
             }
             StatementData::insert($sDatas);
             Cash_movement::create(["bf"=>$req['cash']['bf'], "user_id"=>Auth::user()->user_id, "statement_id"=>$statementId, "bank_payment"=>$req['cash']['bankPayment'], "expenses"=>$req['cash']['expenses'], "float"=>$req['cash']['float'], "credit_balance"=>$req['cash']['creditBalance'], "date"=>$req->date, "created_at"=>Carbon::now(), "updated_at"=>Carbon::now()]);
             // Summary::create(["bf"=>$req['cash']['bf'], "user_id"=>Auth::user()->user_id, "statement_id"=>$statementId, "bank_payment"=>$req['cash']['bankPayment'], "expenses"=>$req['cash']['expenses'], "float"=>$req['cash']['float'], "credit_balance"=>$req['cash']['creditBalance'], "date"=>$req->date, "created_at"=>Carbon::now(), "updated_at"=>Carbon::now()]);
-            Summary::create(["user_id"=>Auth::user()->user_id, "statement_id"=>$statementId, "approved_credit"=>$req['summary']['approvedCredit'], "opening_balance"=>$req['summary']['openingBalance'], "commission"=>$req['summary']['commission'], "deduction"=>$req['summary']['deduction'], "agent_deposit"=>$req['summary']['agentDeposit'], "agent_withdrawal"=>$req['summary']['agentWithdraw'], "date"=>$req->date, "created_at"=>Carbon::now(), "updated_at"=>Carbon::now()]);
+            Summary::create(["user_id"=>Auth::user()->user_id, "statement_id"=>$statementId, "approved_credit"=>$req['summary']['approvedCredit'], "available_credit"=>$req['summary']['availableCredit'], "opening_balance"=>$req['summary']['openingBalance'], "commission"=>$req['summary']['commission'], "deduction"=>$req['summary']['deduction'], "agent_deposit"=>$req['summary']['agentDeposit'], "agent_withdrawal"=>$req['summary']['agentWithdraw'], "sport_sales"=>$req['summary']['sportSales'], "total_winnings"=>$req['summary']['totalWinnings'], "date"=>$req->date, "created_at"=>Carbon::now(), "updated_at"=>Carbon::now()]);
 
         }catch(\Exception $e){
             DB::rollback();

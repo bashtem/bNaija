@@ -121,7 +121,7 @@
                                         <td><span >{{total_sport_bet_stake_row('$scope.sport') | number}}</span></td>
                                     </tr>
                                     <tr>
-                                        <td>VIRTUAL STAKE</td>
+                                        <td>LEAGUE STAKE</td>
                                         <td  ng-repeat="x in cashierList"><span>{{virtual_stake(x.cashier_id) | number}} </span> </td>
                                         <td><span></span>{{total_virtual_stake() | number}}</td>
                                     </tr>
@@ -137,12 +137,12 @@
                                     </tr>
                                     <tr>
                                         <td>OFFICE SALES</td>
-                                        <td  ng-repeat="x in cashierList"><input ng-keyup="checkInput('officeSales', office_sales[x.cashier_id], x.cashier_id)" ng-init="value_input.officeSales[x.cashier_id] = 'empty-input'"  ng-class="value_input.officeSales[x.cashier_id]"  class="form-control form-control-sm size10" ng-model="office_sales[x.cashier_id]" type="number"> </td>
+                                        <td  ng-repeat="x in cashierList"><input  ng-class="colorClass.officeSales[x.cashier_id]"  class="form-control form-control-sm size10" ng-model="office_sales[x.cashier_id]" type="number"> </td>
                                         <td><span>{{total_office_sales() | number}}</span></td>
                                     </tr>
                                     <tr>
                                         <td>WINNINGS PAID</td>
-                                        <td  ng-repeat="x in cashierList"><input ng-keyup="checkInput('winPaid', win_paid[x.cashier_id], x.cashier_id)" ng-init="value_input.winPaid[x.cashier_id] = 'empty-input'"  ng-class="value_input.winPaid[x.cashier_id]"  class="form-control form-control-sm size10 " ng-model="win_paid[x.cashier_id]" type="number"> </td>
+                                        <td  ng-repeat="x in cashierList"><input  ng-class="colorClass.winPaid[x.cashier_id]"  class="form-control form-control-sm size10 " ng-model="win_paid[x.cashier_id]" type="number"> </td>
                                         <td><span>{{total_winnings_paid() | number}}</span></td>
                                     </tr>
                                     <tr>
@@ -174,7 +174,7 @@
                                 </tr>
                                 <tr>
                                     <td>B/F CASH</td>
-                                    <td><input  class="form-control form-control-sm size10" ng-model="cash_movement.bf_cash"  type="number"></td>
+                                    <td><input  ng-class="colorClass.bfCash"  class="form-control form-control-sm size10" ng-model="cash_movement.bf_cash"  type="number"></td>
 
                                 </tr>
                                 <tr>
@@ -184,17 +184,17 @@
                                 </tr>
                                 <tr>
                                     <td>BANK PAYMENT</td>
-                                    <td><input  class="form-control form-control-sm size10"  ng-model="cash_movement.bank_payment"  type="number"></td>
+                                    <td><input ng-class="colorClass.bankPayment"  class="form-control form-control-sm size10"  ng-model="cash_movement.bank_payment"  type="number"></td>
 
                                 </tr>
                                 <tr>
                                     <td>EXPENSES</td>
-                                    <td><input  class="form-control form-control-sm size10"  ng-model="cash_movement.expenses"  type="number"></td>
+                                    <td><input  ng-class="colorClass.expenses"  class="form-control form-control-sm size10"  ng-model="cash_movement.expenses"  type="number"></td>
 
                                 </tr>
                                 <tr>
                                     <td>FLOAT</td>
-                                    <td><input  class="form-control form-control-sm size10"  ng-model="cash_movement.float" type="number"></td>
+                                    <td><input ng-class="colorClass.float"  class="form-control form-control-sm size10"  ng-model="cash_movement.float" type="number"></td>
 
                                 </tr>
                                 <tr>
@@ -248,12 +248,12 @@
                                 </tr>
                                 <tr>
                                     <td>OUTSTANDING WINNINGS</td>
-                                    <td><span>{{0 | number}} </span></td>
+                                    <td><span>{{outstanding_winnings() | number}} </span></td>
 
                                 </tr>
                                 <tr>
                                     <td>AGENT TOTAL DEBT</td>
-                                    <td><span>{{0 | number}} </span></td>
+                                    <td><span>{{agent_total_debt() | number}} </span></td>
 
                                 </tr>
                                 <tr>
@@ -274,17 +274,17 @@
                                 </tr>
                                 <tr>
                                     <td>AGENT DEPOSIT</td>
-                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.agent_deposit"  type="number"></td>
+                                    <td><input ng-class="colorClass.agentDeposit"  class="form-control form-control-sm size10" ng-model="summary_account.agent_deposit"  type="number"></td>
                                 </tr>
                                 <tr>
                                     <td>AGENT WITHDRAWAL</td>
-                                    <td><input  class="form-control form-control-sm size10" ng-model="summary_account.agent_withdrawal"  type="number"></td>
+                                    <td><input ng-class="colorClass.agentWithdraw" class="form-control form-control-sm size10" ng-model="summary_account.agent_withdrawal"  type="number"></td>
                                 </tr>
                                 <tr>
                                     <th></th>
                                     <th></th>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <th>PROFIT / LOSS</th>
                                     <th></th>
                                 </tr>
@@ -297,9 +297,9 @@
                                     <td><span>{{total_winnings() | number}} </span></td>
                                 </tr>
                                 <tr CLASS="table-success">
-                                    <td>PROFIT/LOSS</td>
+                                    <td>PROFIT / LOSS</td>
                                     <td><span>{{profit_loss() | number}} </span></td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>

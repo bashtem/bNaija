@@ -120,22 +120,75 @@ b9ja.controller('cashier', function($http, $scope, fns){
 })
 
 b9ja.controller('statement', function($http, $scope, fns, $parse, $filter){
-    $scope.value_input = {officeSales:[],winPaid:[]};
-    // console.log($scope.value_input);
+    $scope.colorClass = {officeSales:[],winPaid:[], bfCash:'', bankPayment:'', expenses:'', float:'', agentDeposit:'', agentWithdraw:'' };
+    // console.log($scope.colorClass);
     $scope.showDate = function(){
         $scope.uiOpen = true;
     }
     
     $scope.statementDate = new Date();
 
-    $scope.checkInput = function(obj, data, index){
-        // console.log($scope.value_input[obj]);
+    $scope.checkInput = function(obj, data, index=0){
         if(data == null){
-            $scope.value_input[obj][index] = "empty-input";            // CSS CLASS from demo.css
+            $scope.colorClass[obj][index] = "empty-input";            // CSS CLASS from demo.css
         }else{
-            $scope.value_input[obj][index] = "filled-input";          // CSS CLASS
+            $scope.colorClass[obj][index] = "filled-input";          // CSS CLASS
         }
     }
+
+    $scope.checkChanges = function(data,colorData){
+        Object.keys(data).forEach((key, index)=>{
+            if(data[key] == null){
+                colorData[key] = 'empty-input';
+            }else{
+                colorData[key] = 'filled-input';
+            }
+        })
+    }
+
+    $scope.chkChanges = function(data,key){
+        if(data == null){
+            $scope.colorClass[key] = 'empty-input';
+        }else{
+            $scope.colorClass[key] = 'filled-input';
+        }
+    }
+
+    // WATCH LIST.....................
+
+    $scope.$watch('office_sales', ()=>{
+        $scope.checkChanges($scope.office_sales, $scope.colorClass.officeSales);
+    }, true);
+
+    $scope.$watch('win_paid', ()=>{
+        $scope.checkChanges($scope.win_paid, $scope.colorClass.winPaid);
+    }, true);
+
+    $scope.$watch('cash_movement.bf_cash', (newValues, oldValues, scope)=>{
+        $scope.chkChanges($scope.cash_movement.bf_cash, 'bfCash');
+    })
+    
+    $scope.$watch('cash_movement.bank_payment', (newValues, oldValues, scope)=>{
+        $scope.chkChanges($scope.cash_movement.bank_payment, 'bankPayment');
+    })
+
+    $scope.$watch('cash_movement.expenses', (newValues, oldValues, scope)=>{
+        $scope.chkChanges($scope.cash_movement.expenses, 'expenses');
+    })
+
+    $scope.$watch('cash_movement.float', (newValues, oldValues, scope)=>{
+        $scope.chkChanges($scope.cash_movement.float, 'float');
+    })
+
+    $scope.$watch('summary_account.agent_deposit', (newValues, oldValues, scope)=>{
+        $scope.chkChanges($scope.summary_account.agent_deposit, 'agentDeposit');
+    })
+
+    $scope.$watch('summary_account.agent_withdrawal', (newValues, oldValues, scope)=>{
+        $scope.chkChanges($scope.summary_account.agent_withdrawal, 'agentWithdraw');
+    })
+    
+
 
     $scope.summary_account = {};
     credit_array = [];
@@ -175,6 +228,10 @@ b9ja.controller('statement', function($http, $scope, fns, $parse, $filter){
     });
 
     $scope.clearCashierDatas = function(){
+        $scope.summary_account.commission = 0;
+        $scope.summary_account.deduction = 0;
+        $scope.summary_account.agent_deposit = 0;
+        $scope.summary_account.agent_withdrawal = 0;
         return fns.fetchCashier().then((res)=>{
             res.data.forEach((x)=>{
                 $scope.bf[x.cashier_id] = null;
@@ -314,10 +371,29 @@ b9ja.controller('statement', function($http, $scope, fns, $parse, $filter){
     }
 
 
+    // WINNINGS TRACKER
+    $scope.winBf = {};      // INITIALIZED in Fetch statement datas fn
+    $scope.out_win_bal = [];
+    $scope.cal_win_track_bf = function(){
+        var sum = 0;
+        if($scope.bfsFlag == false){
+            return $scope.total_credit_row('$scope.win_sport');
+        }else{
+            Object.keys($scope.winBf).forEach((keys,index)=>{
+                var res = $scope.win_sport[keys] + $scope.winBf[keys] - $scope.win_paid[keys];
+                sum+= $scope.out_win_bal[keys] = res; //(res > 0 )? res:0;
+            })
+            // console.log(sum);
+            return sum;
+        }
+    }
+
+
     // SUMMARY
 
     $scope.available_credit = function(){
-        return $scope.summary_account.approved_credit + $scope.web_balance();
+        $scope.summary_account.available_credit = $scope.summary_account.approved_credit + $scope.web_balance();
+        return $scope.summary_account.available_credit
     }
 
     $scope.cal_web_balance = function(){
@@ -338,16 +414,29 @@ b9ja.controller('statement', function($http, $scope, fns, $parse, $filter){
         return (ca > 0)? ca:0;
     }
 
+    $scope.outstanding_winnings = function(){
+        var compute = ($scope.cal_win_track_bf() * (-1));
+        // console.log(compute);
+        return compute;
+    }
+
+    $scope.agent_total_debt = function(){
+        var value =  ($scope.payable_bet9ja() + $scope.outstanding_winnings());
+        return (value > 0)? 0:value;
+    }
+
     $scope.balance_commission = function(){
         return parseFloat($scope.summary_account.commission||0) - parseFloat($scope.summary_account.deduction||0);
     }
 
     $scope.sport_sales = function(){
-        return $scope.total_sport_bet_stake_row('$scope.sport') + $scope.summary_account.sport_sales;
+        $scope.summary_account.sport_sales_new = $scope.total_sport_bet_stake_row('$scope.sport') + $scope.summary_account.sport_sales;
+        return $scope.summary_account.sport_sales_new;
     }
 
     $scope.total_winnings = function(){
-        return $scope.total_credit_row('$scope.win_sport') + $scope.summary_account.total_winnings;
+        $scope.summary_account.total_winnings_new =  $scope.total_credit_row('$scope.win_sport') + $scope.summary_account.total_winnings;
+        return $scope.summary_account.total_winnings_new;
     }
 
     $scope.profit_loss = function(){
@@ -381,33 +470,48 @@ b9ja.controller('statement', function($http, $scope, fns, $parse, $filter){
                         });
                         $scope.statementId = res.data.statement.statement_id;
 
-                        // SUMMARY
-                        var summary = res.data.statement.summary;
-                        var preSummary = res.data.preSummary;
-                        $scope.summary_account.approved_credit = parseFloat(summary.approved_credit);
-                        $scope.summary_account.opening_balance = (preSummary == null)? parseFloat(summary.opening_balance) : parseFloat(preSummary.available_credit);
-                        $scope.summary_account.sport_sales = (preSummary == null)? parseFloat(summary.sport_sales) : parseFloat(preSummary.sport_sales);
-                        $scope.summary_account.total_winnings = (preSummary == null)? parseFloat(summary.total_winnings) : parseFloat(preSummary.total_winnings);
-                        $scope.summary_account.commission = parseFloat(summary.commission);
-                        $scope.summary_account.deduction = parseFloat(summary.deduction);
-                        $scope.summary_account.agent_deposit = parseFloat(summary.agent_deposit);
-                        $scope.summary_account.agent_withdrawal = parseFloat(summary.agent_withdrawal);
-
-
                         // CASH
                         var cash = res.data.statement.cash;
                         $scope.cash_movement.bank_payment = parseFloat(cash.bank_payment);
                         $scope.cash_movement.expenses = parseFloat(cash.expenses);
                         $scope.cash_movement.float = parseFloat(cash.float);
+
+                        // SUMMARY
+                        var summary = res.data.statement.summary;
+                        $scope.summary_account.approved_credit = parseFloat(summary.approved_credit);
+                        $scope.summary_account.commission = parseFloat(summary.commission);
+                        $scope.summary_account.deduction = parseFloat(summary.deduction);
+                        $scope.summary_account.agent_deposit = parseFloat(summary.agent_deposit);
+                        $scope.summary_account.agent_withdrawal = parseFloat(summary.agent_withdrawal);
+
                     }
-                    $scope.cash_movement.bf_cash = (res.data.bf != null)? (parseFloat(res.data.bf.credit_balance)) : (res.data.statement != null)? parseFloat(res.data.statement.cash.bf):0;
-                        if(res.data.bfs != null){
-                            res.data.bfs.statement_data.forEach((i,index)=>{
-                                var totalCredit = (parseFloat(i.bf) + parseFloat(i.inter_credit) + parseFloat(i.league_sport) + parseFloat(i.win_sport) + parseFloat(i.win_bet49ja));
-                                var totalWithdraw = (parseFloat(i.inter_debit) + parseFloat(i.sport_stake) + parseFloat(i.bet49ja_stake) + parseFloat(i.sport_league));
-                                $scope.bf[i.cashier_id] = parseFloat((totalCredit - totalWithdraw).toFixed(3));
-                            })
-                        }
+
+                    if(res.data.preSummary != null ){
+                        // SUMMARY
+                        // var summary = res.data.statement.summary;
+                        var preSummary = res.data.preSummary;
+                        $scope.summary_account.opening_balance = (preSummary == null)? parseFloat(summary.opening_balance) : parseFloat(preSummary.available_credit);
+                        console.log(preSummary.available_credit);
+                        $scope.summary_account.sport_sales = (preSummary == null)? parseFloat(summary.sport_sales) : parseFloat(preSummary.sport_sales);
+                        $scope.summary_account.total_winnings = (preSummary == null)? parseFloat(summary.total_winnings) : parseFloat(preSummary.total_winnings);
+                    }
+                        
+                        
+                        $scope.cash_movement.bf_cash = (res.data.bf != null)? (parseFloat(res.data.bf.credit_balance)) : (res.data.statement != null)? parseFloat(res.data.statement.cash.bf):0;
+                    if(res.data.bfs != null){
+                        res.data.bfs.statement_data.forEach((i,index)=>{
+                            var totalCredit = (parseFloat(i.bf) + parseFloat(i.inter_credit) + parseFloat(i.league_sport) + parseFloat(i.win_sport) + parseFloat(i.win_bet49ja));
+                            var totalWithdraw = (parseFloat(i.inter_debit) + parseFloat(i.sport_stake) + parseFloat(i.bet49ja_stake) + parseFloat(i.sport_league));
+                            $scope.bf[i.cashier_id] = parseFloat((totalCredit - totalWithdraw).toFixed(3));
+                            // WINNINGS TRACKER BFS
+                            $scope.winBf[i.cashier_id] = parseFloat(i.outstnd_win_bal);
+                        })
+                        $scope.bfsFlag = true;
+                                //    console.log($scope.winBf);
+                    }else{
+                        $scope.bfsFlag = false;
+                    }
+
                 }, (res)=>{console.log(res.data)});
             }
         })
@@ -428,12 +532,13 @@ b9ja.controller('statement', function($http, $scope, fns, $parse, $filter){
                 bet49ja:parseFloat($scope.bet49ja[dat.cashier_id]||0),
                 sportLea:parseFloat($scope.sport_lea[dat.cashier_id]||0),
                 officeSales:parseFloat($scope.office_sales[dat.cashier_id]||0),
-                winPaid:parseFloat($scope.win_paid[dat.cashier_id]||0)
+                winPaid:parseFloat($scope.win_paid[dat.cashier_id]||0),
+                outWinBal:parseFloat($scope.out_win_bal[dat.cashier_id]||0),
             };
             datas.push(obj);
         })
         var cashMov = {bf:parseFloat($scope.cash_movement.bf_cash||0), bankPayment:parseFloat($scope.cash_movement.bank_payment||0), expenses:parseFloat($scope.cash_movement.expenses||0), float:parseFloat($scope.cash_movement.float||0), creditBalance:parseFloat($scope.credit_balance()||0) };
-        var summary = {approvedCredit:parseFloat($scope.summary_account.approved_credit||0), openingBalance:parseFloat($scope.summary_account.opening_balance||0), commission:parseFloat($scope.summary_account.commission||0), deduction:parseFloat($scope.summary_account.deduction||0), agentDeposit:parseFloat($scope.summary_account.agent_deposit||0), agentWithdraw:parseFloat($scope.summary_account.agent_withdrawal||0) };
+        var summary = {approvedCredit:parseFloat($scope.summary_account.approved_credit||0), openingBalance:parseFloat($scope.summary_account.opening_balance||0), commission:parseFloat($scope.summary_account.commission||0), deduction:parseFloat($scope.summary_account.deduction||0), agentDeposit:parseFloat($scope.summary_account.agent_deposit||0), agentWithdraw:parseFloat($scope.summary_account.agent_withdrawal||0), availableCredit:parseFloat($scope.summary_account.available_credit||0), sportSales:parseFloat($scope.summary_account.sport_sales_new||0) , totalWinnings:parseFloat($scope.summary_account.total_winnings_new||0) };
         sendData['data'] = datas;
         sendData['cash'] = cashMov;
         sendData['summary'] = summary;
